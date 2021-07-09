@@ -30,6 +30,7 @@ import express, {
   
     private initializeMiddlewares = () => {
       this.app.use(express.json());
+      this.app.use(express.static('/storage'));
     };
   
     private initializeControllers = () => {
