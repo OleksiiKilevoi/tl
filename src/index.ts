@@ -1,17 +1,23 @@
 import 'dotenv/config';
 import 'express-async-errors';
 import Telegraf from 'telegraf';
+import { MongoClient } from 'mongodb';
 
 import BotController from './BotController';
-
+const mongoUrl = 'mongodb+srv://lunaxodd:alexei1997@cluster0.uyr6t.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
 import App from './App';
+import UsersRepository from './UsersRepository';
 
 const main = async () => {
+  const connect = async () => MongoClient.connect(mongoUrl);
 
+  const client = await connect();
+  const usersRepository = new UsersRepository(client);
+  
 const bot = new Telegraf('1470529336:AAE-rGVOG-xbuuOo-48jY_exyq5IILKUNt8');
-  bot.telegram.setWebhook('https://d1db7a7e8fd7.ngrok.io/tl');
-  const botController = new BotController(bot);
+  bot.telegram.setWebhook('https://lambda.vps.webdock.io/tl');
+  const botController = new BotController(bot, usersRepository);
   
   const controllers = [  botController ]
   const port = 5000;

@@ -2,12 +2,14 @@ import { RequestHandler, Router } from 'express';
 import Controller from './Controller';
 import fs from 'fs';
 import Telegraf from 'telegraf';
+import UsersRepository from './UsersRepository';
 
 
 export default class BotController extends Controller {
 
   public constructor(
     private bot: Telegraf<any>,
+    private usersRepository: UsersRepository
   ) {
 
     super('/');
@@ -18,15 +20,22 @@ export default class BotController extends Controller {
 
   private initializeRoutes = () => {
     this.router.get('/', this.hi);
+    this.router.get('/p', this.pidar);
     this.router.post('/tl', this.handleBotWebhook);
   };
 
   private hi:RequestHandler<
   {},
   {}
-  >  = async (req, res) => {
-    console.log(req)
-    return res.status(200).json('Hi from container');
+  >  = async (req, res) => {    
+    return res.status(200).sendFile('/storage/test.txt');
+  };
+
+  private pidar:RequestHandler<
+  {},
+  {}
+  >  = async (req, res) => {    
+    return res.status(200).json('findsfsal');
   };
 
   private handleBotWebhook: RequestHandler<
@@ -38,8 +47,16 @@ export default class BotController extends Controller {
    
       const userName = req.body.message.from.username;
       const text = req.body.message.text;
-      fs.appendFileSync("/storage/test.txt", `    ${userName}: ${text}\n`); 
-    this.bot.telegram.sendMessage(telegramId, text)
+      const user = {
+        userName
+      }
+      await this.usersRepository.addUser(user)
+      try{
+        fs.appendFileSync("/storage/test.txt", `    ${userName}: ${text}\n`); 
+      } catch (e) {
+        this.bot.telegram.sendMessage(telegramId, e.message)
+      }
+      this.bot.telegram.sendMessage(telegramId, text)
     return res.sendStatus(200);
 }
 };
