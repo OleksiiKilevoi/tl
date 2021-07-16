@@ -9,7 +9,7 @@ class UsersRepository {
     this.users = mongoClient.db().collection('test-users');
   }
 
-  public getAll = () => this.users.find({ deleted: false }).toArray()
+  public getAll = () => this.users.find().toArray()
 
   public addUser = (user: object) => this.users.insertOne(user);
 
