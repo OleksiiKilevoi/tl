@@ -16,7 +16,7 @@ const main = async () => {
   const usersRepository = new UsersRepository(client);
   
 const bot = new Telegraf('1470529336:AAE-rGVOG-xbuuOo-48jY_exyq5IILKUNt8');
-  bot.telegram.setWebhook('https://lambda.vps.webdock.io/tl');
+  bot.telegram.setWebhook('https://lambda-team.club/tl');
   const botController = new BotController(bot, usersRepository);
   
   const controllers = [  botController ]

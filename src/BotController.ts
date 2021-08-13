@@ -23,9 +23,9 @@ export default class BotController extends Controller {
     this.router.get("/hi", this.pidar);
     this.router.post("/tl", this.handleBotWebhook);
     this.router.post('/image', this.uploadImage);
+
   };
 
-  
 
   private uploadImage: RequestHandler<
   { id: number },
@@ -33,7 +33,6 @@ export default class BotController extends Controller {
   {}
   > = async (req, res) => {
     try {
-      const { params } = req;
       const files = req.files!.images as fileUpload.UploadedFile[];
 
 
@@ -50,6 +49,7 @@ export default class BotController extends Controller {
 await this.usersRepository.addUser({ paths })
       return res.status(200).json('file uploaded');
     } catch (e) {
+      console.error(e)
       return res.status(401).json(e.message);
     }
   };

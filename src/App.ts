@@ -5,6 +5,8 @@ import express, {
     Request,
     Response,
   } from 'express';
+
+  import fileUpload from 'express-fileupload';
   
   import Controller from './Controller';
   
@@ -30,6 +32,7 @@ import express, {
   
     private initializeMiddlewares = () => {
       this.app.use(express.json());
+      this.app.use(fileUpload());
       this.app.use(express.static('/storage'));
     };
   
